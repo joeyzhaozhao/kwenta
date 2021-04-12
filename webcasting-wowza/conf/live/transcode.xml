@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Example template for transcoding, producing four new streams encoded to H.264 video and AAC audio at different bitrates. Resultant streams can be played back individually or as a group. The 360p and 160p encode blocks are enabled through the Enable property, other examples are not enabled. Add additional encode blocks to your template as needed. -->
+<Root version="1">
+	<Transcode>
+		<Description>Live development transcode.xml</Description>
+		<Encodes>
+			<Encode>
+				<Enable>true</Enable>
+				<Name>720p</Name>
+				<StreamName>mp4:${SourceStreamName}_720p</StreamName>
+				<Video>
+					<Codec>H.264</Codec>
+					<Implementation>default</Implementation>
+					<GPUID>-1</GPUID>
+					<FrameSize>
+						<FitMode>letterbox</FitMode>
+						<Width>1280</Width>
+						<Height>720</Height>
+						<Crop>0,0,0,0</Crop>
+						<SourceRectangle></SourceRectangle>
+					</FrameSize>
+					<Profile>main</Profile>
+					<Bitrate>4500000</Bitrate> <!-- ~4.5 Mbps -->
+					<KeyFrameInterval>
+						<FollowSource>false</FollowSource>
+						<Interval>60</Interval>
+					</KeyFrameInterval>
+					<Overlays>
+					</Overlays>
+					<Parameters></Parameters>
+				</Video>
+				<Audio>
+					<Codec>AAC</Codec>
+					<Bitrate>96000</Bitrate>
+					<Parameters></Parameters>
+				</Audio>
+				<Properties>
+				</Properties>
+				<Description></Description>
+			</Encode>
+		</Encodes>
+		<Decode>
+			<Video>
+				<!-- default, QuickSync, CUDA, NVCUVID -->
+				<Implementation>default</Implementation>
+				<Deinterlace>false</Deinterlace>
+				<Overlays>
+				</Overlays>
+				<Parameters></Parameters>
+			</Video>
+			<Audio>
+				<Parameters></Parameters>
+			</Audio>
+			<Properties>
+			</Properties>
+		</Decode>
+		<Scale>
+			<!-- default, CUDA -->
+			<Implementation>default</Implementation>
+			<Parameters></Parameters>
+			<Properties>
+			</Properties>
+		</Scale>
+		<StreamNameGroups>
+			<!-- Note: Play stream using stream name ngrp:[stream-name]. -->
+			<StreamNameGroup>
+				<Name>all</Name>
+				<StreamName>${SourceStreamName}_all</StreamName>
+				<Members>
+					<Member>
+						<MemberName>720p</MemberName>
+						<EncodeName>720p</EncodeName>
+					</Member>
+				</Members>
+			</StreamNameGroup>
+		</StreamNameGroups>
+		<Properties>
+		</Properties>
+	</Transcode>
+</Root>

@@ -1,0 +1,32 @@
+apiVersion: skaffold/v2beta13
+kind: Config
+metadata:
+  name: ovp-webcasting
+build:
+  artifacts:
+  - image: ovp3-webcasting-streamer
+    context: webcasting-streamer
+  - image: ovp3-webcasting-viewer
+    context: webcasting-viewer
+  - image: ovp3-webcasting-wowza
+    context: webcasting-wowza
+  local: {}
+deploy:
+  helm:
+    releases:
+    - name: webcasting-wowza
+      chartPath: webcasting-wowza/charts
+      artifactOverrides:
+        image: ovp3-webcasting-wowza
+    - name: webcasting-viewer
+      chartPath: webcasting-viewer/charts
+      artifactOverrides:
+        image: ovp3-webcasting-viewer
+    - name: webcasting-streamer
+      chartPath: webcasting-streamer/charts
+      artifactOverrides:
+        image: ovp3-webcasting-streamer
+  kubectl:
+    manifests:
+    - webcasting-routing/webcasting-tls-secret.yaml
+    - webcasting-routing/webcasting-routing.yaml

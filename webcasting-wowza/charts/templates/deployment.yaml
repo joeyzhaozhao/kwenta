@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: ovp3-webcasting
+  labels:
+    app: {{ .Chart.Name }}
+    group: ovp3-webcasting-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      hostAliases:
+      - ip: "127.0.0.1"
+        hostnames:
+        - "ovp3-wowza.dblabs.net"
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image }}
+        ports:
+        - containerPort: 1935
+        - containerPort: 8087
+        - containerPort: 8088
+        - containerPort: 9443
+        env:
+        - name: WSE_LIC
+          value: {{ .Values.licenseKey }}
+        - name: WSE_IP_PARAM
+          value: 127.0.0.1
+        - name: WSE_ICE_IP
+          value: {{ .Values.wowzaIceIp }}
+        volumeMounts:
+          - mountPath: /usr/local/WowzaStreamingEngine/logs
+            name: wowza-logs
+          - mountPath: /usr/local/WowzaStreamingEngine/manager/logs
+            name: wowza-manager-logs
+      volumes:
+        - name: wowza-logs
+          hostPath:
+            path: {{ .Values.logsWowza }}
+        - name: wowza-manager-logs
+          hostPath:
+            path: {{ .Values.logsManager }}

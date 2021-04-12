@@ -1,0 +1,90 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  namespace: ovp3-webcasting
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  tls:
+  - hosts:
+    - ovp3-webcasting.dblabs.net
+    secretName: dblabs-net
+  rules:
+    - host: ovp3-webcasting.dblabs.net
+      http:
+        paths:
+        - pathType: Prefix
+          path: /streamer/(.*)
+          backend:
+            service:
+              name: ovp3-webcasting-streamer
+              port: 
+                number: 80
+        - pathType: Prefix  
+          path: /viewer/(.*)
+          backend:
+            service:
+              name: ovp3-webcasting-viewer
+              port: 
+                number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wowza-ingress
+  namespace: ovp3-webcasting
+spec:
+  tls:
+  - hosts:
+    - ovp3-wowza.dblabs.net
+    secretName: dblabs-net
+  rules:
+    - host: ovp3-wowza.dblabs.net
+      http:
+        paths:
+        - pathType: Prefix
+          path: /enginemanager/
+          backend:
+            service:
+              name: ovp3-webcasting-wowza
+              port: 
+                number: 8088
+        - pathType: Prefix
+          path: /live
+          backend:
+            service:
+              name: ovp3-webcasting-wowza
+              port: 
+                number: 1935
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: ovp3-webcasting-wowza
+              port: 
+                number: 8087
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wowza-websocket-ingress
+  namespace: ovp3-webcasting
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "https"
+spec:
+  tls:
+  - hosts:
+    - ovp3-wowza.dblabs.net
+    secretName: dblabs-net
+  rules:
+    - host: ovp3-wowza.dblabs.net
+      http:
+        paths:
+        - pathType: Prefix
+          path: /webrtc-session.json
+          backend:
+            service:
+              name: ovp3-webcasting-wowza
+              port: 
+                number: 9443
