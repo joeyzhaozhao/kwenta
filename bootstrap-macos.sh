@@ -1,6 +1,6 @@
 # update xcode tools 
-#sudo rm -rf /Library/Developer/CommandLineTools
-#sudo xcode-select --install
+sudo rm -rf /Library/Developer/CommandLineTools
+sudo xcode-select --install
 
 # install homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -21,7 +21,7 @@ microk8s enable ingress
 microk8s enable registry
 
 # install docker
-#brew install --cask docker
+brew install --cask docker
 
 # create default webcasting namespace
 kubectl create namespace ovp3-webcasting
