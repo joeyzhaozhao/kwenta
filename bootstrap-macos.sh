@@ -5,6 +5,14 @@ sudo xcode-select --install
 # install homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
+# install virtual box (we will need a network driver from it) 
+brew install --cask virtualbox
+
+# install multipass
+brew install --cask multipass
+# set another network driver for microk8s (see https://github.com/ubuntu/microk8s/issues/1368)
+sudo multipass set local.driver=virtualbox
+
 # install microk8s
 brew install ubuntu/microk8s/microk8s
 microk8s install
@@ -21,7 +29,7 @@ microk8s enable ingress
 microk8s enable registry
 
 # install docker
-brew install --cask docker
+# brew install --cask docker
 
 # create default webcasting namespace
 kubectl create namespace ovp3-webcasting
@@ -37,8 +45,8 @@ sudo install skaffold /usr/local/bin/
 brew install helm
 
 # tune ingress
-kubectl patch cm nginx-ingress-tcp-microk8s-conf -n ingress --patch "$(cat webcasting-routing/ingress-tuning/ingress-config-map-tuning.yaml)"
-kubectl patch ds nginx-ingress-microk8s-controller -n ingress --patch "$(cat webcasting-routing/ingress-tuning/ingress-daemon-set-tuning.yaml)"
+kubectl patch cm nginx-ingress-tcp-microk8s-conf -n ingress --patch "$(cat webcasting-routing/microk8s-ingress-tuning/ingress-config-map-tuning.yaml)"
+kubectl patch ds nginx-ingress-microk8s-controller -n ingress --patch "$(cat webcasting-routing/microk8s-ingress-tuning/ingress-daemon-set-tuning.yaml)"
 
 # modify hosts
 KUBE_CLUSTER_IP=$(multipass info microk8s-vm | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | head -1)
@@ -47,8 +55,8 @@ echo "$KUBE_CLUSTER_IP       ovp3-webcasting.dblabs.net" | sudo tee -a /etc/host
 echo "$KUBE_CLUSTER_IP       ovp3-wowza.dblabs.net" | sudo tee -a /etc/hosts
 
 # add cluster IP as ICE candidate IP
-cp webcasting-wowza/charts/values.tpl webcasting-wowza/charts/values.yaml
-echo "wowzaIceIp: $KUBE_CLUSTER_IP" >> webcasting-wowza/charts/values.yaml
+cp webcasting-wowza/charts/values/values.tpl webcasting-wowza/charts/values/values-dev.yaml
+echo "wowzaIceIp: $KUBE_CLUSTER_IP" >> webcasting-wowza/charts/values/values-dev.yaml
 
 # modify VM hosts
 multipass exec microk8s-vm -- sudo bash -c 'echo "127.0.0.1 ovp3-webcasting.dblabs.net" >> /etc/hosts'

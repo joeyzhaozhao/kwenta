@@ -16,17 +16,22 @@ deploy:
     releases:
     - name: webcasting-wowza
       chartPath: webcasting-wowza/charts
+      valuesFiles:
+        - webcasting-wowza/charts/values/values-dev.yaml
       artifactOverrides:
         image: ovp3-webcasting-wowza
     - name: webcasting-viewer
       chartPath: webcasting-viewer/charts
+      valuesFiles:
+        - webcasting-viewer/charts/values/values-dev.yaml
       artifactOverrides:
         image: ovp3-webcasting-viewer
     - name: webcasting-streamer
       chartPath: webcasting-streamer/charts
+      valuesFiles:
+        - webcasting-streamer/charts/values/values-dev.yaml
       artifactOverrides:
         image: ovp3-webcasting-streamer
   kubectl:
     manifests:
-    - webcasting-routing/webcasting-tls-secret.yaml
-    - webcasting-routing/webcasting-routing.yaml
+    - webcasting-routing/secrets/dblabs-net-tls-secret.yaml

@@ -36,13 +36,13 @@ install skaffold /usr/local/bin/
 snap install helm --classic
 
 # tune ingress
-kubectl patch cm nginx-ingress-tcp-microk8s-conf -n ingress --patch-file webcasting-routing/ingress-tuning/ingress-config-map-tuning.yaml
-kubectl patch ds nginx-ingress-microk8s-controller -n ingress --patch-file webcasting-routing/ingress-tuning/ingress-daemon-set-tuning.yaml
+kubectl patch cm nginx-ingress-tcp-microk8s-conf -n ingress --patch-file webcasting-routing/microk8s-ingress-tuning/ingress-config-map-tuning.yaml
+kubectl patch ds nginx-ingress-microk8s-controller -n ingress --patch-file webcasting-routing/microk8s-ingress-tuning/ingress-daemon-set-tuning.yaml
 
 # modify hosts
 echo "127.0.0.1       ovp3-webcasting.dblabs.net" >> /etc/hosts
 echo "127.0.0.1       ovp3-wowza.dblabs.net" >> /etc/hosts
 
 # add localhost as ICE candidate IP
-cp webcasting-wowza/charts/values.tpl webcasting-wowza/charts/values.yaml
-echo "wowzaIceIp: 127.0.0.1" >> webcasting-wowza/charts/values.yaml
+cp webcasting-wowza/charts/values/values.tpl webcasting-wowza/charts/values/values-dev.yaml
+echo "wowzaIceIp: 127.0.0.1" >> webcasting-wowza/charts/values/values-dev.yaml

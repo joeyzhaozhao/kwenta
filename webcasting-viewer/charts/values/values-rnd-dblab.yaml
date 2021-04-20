@@ -1,0 +1,3 @@
+host: ovp3-webcasting.rnd.dblab
+namespace: ovp3-webcasting
+tlsSecretName: rnd-dblab

@@ -1,0 +1,7 @@
+licenseKey: EDEV4-XXXX-XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXXXX
+logsWowza: /var/log/wowza/
+logsManager: /var/log/wowza-manager/
+host: ovp3-wowza.rnd.dblab
+namespace: ovp3-webcasting
+wowzaIceIp: 10.99.99.54
+tlsSecretName: rnd-dblab

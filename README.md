@@ -8,23 +8,24 @@
 
 #### Preparations:
 
-##### Configuration file:
-First off all you need to change a configuration file. Edit the <code>webcasting-wowza/charts/values.yaml</code> file and set your Wowza development license key.
-
 ##### Bootsrap
 For installing the needed dependencies and making the needed configuration changes and tuning you should use a bootstrap script.
 
 <b>If you are MacOS user:</b> 
 - open the App Store application and install the latest version of XCode
+- install Docker desktop from here (https://docs.docker.com/docker-for-mac/install/) and start it
 - disable the build-in macos firewall (System Preferences -> Security & Privacy -> Firewall -> Turn Off Firewall)
 - turn off the Cisco AnyConnect VPN client
 - use the command below:
 
-<code>./bootsrap-macos.sh</code>
+<code>./bootstrap-macos.sh</code>
 
 <b>If you are Linux user</b> you should use the command below:
 
 <code>./bootstrap-linux.sh</code>
+
+##### Configuration file:
+You should change a configuration file. Edit the <code>webcasting-wowza/charts/values/values-dev.yaml</code> file and set your Wowza development license key.
 
 #### How to run
 For starting project in the development mode you can use:
