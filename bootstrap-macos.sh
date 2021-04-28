@@ -45,8 +45,8 @@ sudo install skaffold /usr/local/bin/
 brew install helm
 
 # tune ingress
-kubectl patch cm nginx-ingress-tcp-microk8s-conf -n ingress --patch "$(cat webcasting-routing/microk8s-ingress-tuning/ingress-config-map-tuning.yaml)"
-kubectl patch ds nginx-ingress-microk8s-controller -n ingress --patch "$(cat webcasting-routing/microk8s-ingress-tuning/ingress-daemon-set-tuning.yaml)"
+kubectl patch cm nginx-ingress-tcp-microk8s-conf -n ingress --patch "$(cat webcasting-routing-dev/microk8s-ingress-tuning/ingress-config-map-tuning.yaml)"
+kubectl patch ds nginx-ingress-microk8s-controller -n ingress --patch "$(cat webcasting-routing-dev/microk8s-ingress-tuning/ingress-daemon-set-tuning.yaml)"
 
 # modify hosts
 KUBE_CLUSTER_IP=$(multipass info microk8s-vm | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | head -1)

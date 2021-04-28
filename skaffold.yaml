@@ -34,4 +34,4 @@ deploy:
         image: ovp3-webcasting-streamer
   kubectl:
     manifests:
-    - webcasting-routing/secrets/dblabs-net-tls-secret.yaml
+    - webcasting-routing-dev/secrets/dblabs-net-tls-secret.yaml

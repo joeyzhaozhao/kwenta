@@ -36,8 +36,8 @@ install skaffold /usr/local/bin/
 snap install helm --classic
 
 # tune ingress
-kubectl patch cm nginx-ingress-tcp-microk8s-conf -n ingress --patch-file webcasting-routing/microk8s-ingress-tuning/ingress-config-map-tuning.yaml
-kubectl patch ds nginx-ingress-microk8s-controller -n ingress --patch-file webcasting-routing/microk8s-ingress-tuning/ingress-daemon-set-tuning.yaml
+kubectl patch cm nginx-ingress-tcp-microk8s-conf -n ingress --patch-file webcasting-routing-dev/microk8s-ingress-tuning/ingress-config-map-tuning.yaml
+kubectl patch ds nginx-ingress-microk8s-controller -n ingress --patch-file webcasting-routing-dev/microk8s-ingress-tuning/ingress-daemon-set-tuning.yaml
 
 # modify hosts
 echo "127.0.0.1       ovp3-webcasting.dblabs.net" >> /etc/hosts

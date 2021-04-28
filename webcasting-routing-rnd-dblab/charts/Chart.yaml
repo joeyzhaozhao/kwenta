@@ -1,0 +1,4 @@
+apiVersion: v1
+description: OVP3 rounting chart
+name: ovp3-webcasting-routing
+version: 0.1.0

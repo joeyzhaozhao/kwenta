@@ -16,6 +16,10 @@ spec:
       labels:
         app: {{ .Chart.Name }}
     spec:
+      {{- if .Values.dockerSecretName }}
+      imagePullSecrets: 
+        - name: {{ .Values.dockerSecretName }}
+      {{- end }}
       containers:
       - name: {{ .Chart.Name }}
         image: {{ .Values.image }}

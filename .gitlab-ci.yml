@@ -1,0 +1,97 @@
+stages:
+  - build
+  - test
+  - rnd.dblab deploy
+
+.docker-pre-post: &docker-pre-post
+  stage: build
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  after_script:
+    - docker logout $CI_REGISTRY
+  
+### build stage
+viewer-build:
+  <<: *docker-pre-post
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:viewer-$CI_COMMIT_SHA ./webcasting-viewer
+    - docker push $CI_REGISTRY_IMAGE:viewer-$CI_COMMIT_SHA
+  only:
+    changes:
+      - webcasting-viewer/**/*
+
+streamer-build:
+  <<: *docker-pre-post
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:streamer-$CI_COMMIT_SHA ./webcasting-streamer
+    - docker push $CI_REGISTRY_IMAGE:streamer-$CI_COMMIT_SHA
+  only:
+    changes:
+      - webcasting-streamer/**/*
+
+wowza-build:
+  <<: *docker-pre-post
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:wowza-$CI_COMMIT_SHA ./webcasting-wowza
+    - docker push $CI_REGISTRY_IMAGE:wowza-$CI_COMMIT_SHA
+  only:
+    changes:
+      - webcasting-wowza/**/*
+
+### dpeloy stage
+nginx-ingress-rnd-dblab-deploy:
+  stage: rnd.dblab deploy
+  script:
+    - >
+      helm upgrade webcasting-rounting-rnd-dblab ./webcasting-routing-rnd-dblab/charts \
+        --install \
+        -n ovp3-webcasting
+  only:
+    changes:
+      - webcasting-routing-rnd-dblab/**/*
+
+viewer-rnd-dblab-deploy:
+  stage: rnd.dblab deploy
+  script:
+    - >
+      helm upgrade webcasting-viewer ./webcasting-viewer/charts \
+        --set-string image=$CI_REGISTRY_IMAGE:viewer-$CI_COMMIT_SHA \
+        --install \
+        -n ovp3-webcasting --create-namespace \
+        --values=./webcasting-viewer/charts/values/values-rnd-dblab.yaml
+  only:
+    refs:
+      - master
+    changes:
+      - webcasting-viewer/**/* 
+
+streamer-rnd-dblab-deploy:
+  stage: rnd.dblab deploy
+  script:
+    - >
+      helm upgrade webcasting-streamer ./webcasting-streamer/charts \
+        --set-string image=$CI_REGISTRY_IMAGE:streamer-$CI_COMMIT_SHA \
+        --install \
+        -n ovp3-webcasting --create-namespace \
+        --values=./webcasting-streamer/charts/values/values-rnd-dblab.yaml  
+  only:
+    refs:
+      - master
+    changes:
+      - webcasting-streamer/**/*
+
+wowza-rnd-dblab-deploy:
+  stage: rnd.dblab deploy
+  script:
+    - sed -i "s/EDEV4-XXXX-XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXXXX/$WOWZA_LICENSE_KEY/" ./webcasting-wowza/charts/values/values-rnd-dblab.yaml 
+    - >
+      helm upgrade webcasting-wowza ./webcasting-wowza/charts \
+        --set-string image=$CI_REGISTRY_IMAGE:wowza-$CI_COMMIT_SHA \
+        --install \
+        -n ovp3-webcasting --create-namespace \
+        --values=./webcasting-wowza/charts/values/values-rnd-dblab.yaml  
+  only:
+    refs:
+      - master
+    changes:
+      - webcasting-wowza/**/*

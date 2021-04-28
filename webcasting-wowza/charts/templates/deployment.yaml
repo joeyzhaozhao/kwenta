@@ -16,6 +16,10 @@ spec:
       labels:
         app: {{ .Chart.Name }}
     spec:
+      {{- if .Values.dockerSecretName }}
+      imagePullSecrets: 
+        - name: {{ .Values.dockerSecretName }}
+      {{- end }}
       hostAliases:
       - ip: "127.0.0.1"
         hostnames:
