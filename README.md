@@ -14,11 +14,9 @@ For installing the needed dependencies and making the needed configuration chang
 <b>If you are MacOS user:</b> 
 - open the App Store application and install the latest version of XCode
 - install Docker desktop from here (https://docs.docker.com/docker-for-mac/install/) and start it
-- disable the build-in macos firewall (System Preferences -> Security & Privacy -> Firewall -> Turn Off Firewall)
-- turn off the Cisco AnyConnect VPN client
 - use the command below:
 
-<code>./bootstrap-macos.sh</code>
+<code>./bootstrap-macos-vagrant.sh</code>
 
 <b>If you are Linux user</b> you should use the command below:
 
