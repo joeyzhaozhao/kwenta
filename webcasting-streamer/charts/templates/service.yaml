@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Chart.Name }}
+    group: ovp3-webasting-frontend-service
+spec:
+  ports:
+  - port: 80
+    name: http
+    protocol: TCP
+  selector:
+    app: {{ .Chart.Name }}

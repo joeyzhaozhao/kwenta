@@ -1,0 +1,3 @@
+host: ovp3-webcasting.dblabs.net
+namespace: ovp3-webcasting
+tlsSecretName: dblabs-net

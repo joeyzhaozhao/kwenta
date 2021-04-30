@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: viewer-ingress
+  namespace: {{ .Values.namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.host }}
+    secretName: {{ .Values.tlsSecretName }}
+  rules:
+    - host: {{ .Values.host }}
+      http:
+        paths:
+        - pathType: Prefix  
+          path: /viewer/(.*)
+          backend:
+            service:
+              name: ovp3-webcasting-viewer
+              port: 
+                number: 80

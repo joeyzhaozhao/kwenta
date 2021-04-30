@@ -1,0 +1,4 @@
+apiVersion: v1
+description: OVP3 wowza streaming engine chart
+name: ovp3-webcasting-wowza
+version: 0.1.0

@@ -1,0 +1,59 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wowza-ingress
+  namespace: {{ .Values.namespace }}
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.host }}
+    secretName: {{ .Values.tlsSecretName }}
+  rules:
+    - host: {{ .Values.host }}
+      http:
+        paths:
+        - pathType: Prefix
+          path: /enginemanager/
+          backend:
+            service:
+              name: ovp3-webcasting-wowza
+              port: 
+                number: 8088
+        - pathType: Prefix
+          path: /live
+          backend:
+            service:
+              name: ovp3-webcasting-wowza
+              port: 
+                number: 1935
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: ovp3-webcasting-wowza
+              port: 
+                number: 8087
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wowza-websocket-ingress
+  namespace: {{ .Values.namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "https"
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.host }}
+    secretName: {{ .Values.tlsSecretName }}
+  rules:
+    - host: {{ .Values.host }}
+      http:
+        paths:
+        - pathType: Prefix
+          path: /webrtc-session.json
+          backend:
+            service:
+              name: ovp3-webcasting-wowza
+              port: 
+                number: 9443

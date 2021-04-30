@@ -1,0 +1,7 @@
+licenseKey: EDEV4-H7MPm-RTvkD-a6A6z-C3wGm-xyw9w-4Hw4zH43jFhP
+logsWowza: /var/log/wowza/
+logsManager: /var/log/wowza-manager/
+host: ovp3-wowza.dblabs.net
+namespace: ovp3-webcasting
+wowzaIceIp: 127.0.0.1
+tlsSecretName: dblabs-net

@@ -1,0 +1,4 @@
+apiVersion: v1
+description: OVP3 webcasting streamer chart
+name: ovp3-webcasting-streamer
+version: 0.1.0
